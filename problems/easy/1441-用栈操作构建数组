@@ -1,0 +1,16 @@
+class Solution(object):
+    def buildArray(self, target, n):
+        lis = []
+        k = 0
+        for i in range(1,n+1):
+            if k < len(target):
+                if i == target[k]:
+                    lis.append("Push")
+                    k = k + 1
+                else:
+                    lis.append("Push")
+                    lis.append("Pop")
+        return lis
+        
+        
+        就用到了Python的数组创建、append操作。
