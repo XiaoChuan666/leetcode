@@ -1,0 +1,19 @@
+class Solution(object):
+    def productExceptSelf(self, nums):
+        output = []
+        for i in range(0,len(nums)):#第一趟遍历，先把output里面放入数字1，再正序、错一位依次放入nums的元素
+            output.append(1)
+            if i-1 >= 0:
+                output[i] = output[i-1] * nums[i-1]
+        for i in range(len(nums)-1, -1, -1):#逆序遍历一次，再逆序、错一位依次向output数组加入nums的元素，第三个参数的-1表示step为-1
+            if i+1 <= len(nums)-1:
+                output[i] *= nums[i+1]
+                if i>=0:
+                    nums[i] *= nums[i+1]
+        return output
+        
+        
+        
+        
+        #大致原理就是先从头遍历，再从尾到头遍历。时间复杂度为O(n)。
+        
