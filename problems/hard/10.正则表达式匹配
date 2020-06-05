@@ -1,0 +1,31 @@
+'''
+思路：
+    生成二维数组，动态规划
+'''
+
+class Solution(object):
+    def isMatch(self, s, p):
+        slen = len(s)
+        plen = len(p)
+        arr = [([False]*(slen+1))for _ in range(plen+1)]
+        arr[0][0] = True
+        for i in range(1,plen+1):
+            if i >= 2 and p[i-1] == '*' and arr[i-2][0]:
+                arr[i][0] = True
+        for i in range(1,plen+1):
+            for j in range(1,slen+1):
+                if p[i-1] == '*':
+                    if p[i-2] == '.':
+                        if arr[i-1][j-1] or arr[i][j-1] or arr[i-1][j]:
+                            arr[i][j] = True
+                        if i >= 2 and arr[i-2][j]:
+                            arr[i][j] = True
+                    else:
+                        if p[i-2] == s[j-1] and (arr[i-1][j] or arr[i][j-1] or arr[i-2][j]):
+                            arr[i][j] = True
+                        if i>=2 and p[i-2] != s[j-1] and arr[i-2][j]:
+                            arr[i][j] = True
+                else:
+                    if (p[i-1] == s[j-1] or p[i-1] == '.') and arr[i-1][j-1]:
+                        arr[i][j] = True
+        return arr[plen][slen]
