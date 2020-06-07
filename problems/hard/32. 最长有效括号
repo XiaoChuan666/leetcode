@@ -1,0 +1,59 @@
+'''
+
+没用动态规划，因为水平有限。
+这里，我们申请了一个list空间，把非直接相邻的左右括号分别用1和-1放入list，把直接相邻的左右括号用2放入list。
+接下来就用双指针来操作list中的-1和1，看他们能不能匹配。
+最后遍历list，得到最大值。
+
+'''
+
+
+class Solution(object):
+    def longestValidParentheses(self, s):
+        p = []
+        i = 0
+        while i <len(s):
+            if s[i] == '(':
+                if i+1 < len(s) and s[i+1] == ')':
+                    p.append(2)
+                    i += 1
+                else:
+                    p.append(1)
+            else:
+                p.append(-1)
+            i += 1
+        while p != [] and p[0] == -1:
+            p.pop(0)
+        point1 = -1
+        point2 = -1
+        flag = True
+        while flag:
+            num1 = 0
+            for i in range(0,len(p)):
+                if p[i] == 1:
+                    num1 += 1
+                if i+1 < len(p) and p[i+1] == -1 and p[i] != -1:
+                    point2 = i+1
+                    if num1 >= 1:
+                        break
+            for i in range(0,point2):
+                if i+1 < len(p) and p[i] == 1 and p[i+1] != 1:
+                    point1 = i
+            flag = False
+            if point1 != -1 and point2 != -1:
+                p[point1] = 0
+                p[point2] = 0
+                p[point1+1] += 2
+                flag = True
+            point1 = -1
+            point2 = -1
+        max = 0
+        lens = 0
+        for i in p:
+            if i != 1 and i != -1:
+                lens += i
+            if lens > max:
+                max = lens
+            if i == 1 or i == -1:
+                lens = 0
+        return max
