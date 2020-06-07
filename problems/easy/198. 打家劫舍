@@ -1,0 +1,35 @@
+'''
+动态规划：
+1.原问题与子问题：原问题是求n个房间的最优解，子问题是求i个房间的最优解
+2.dp[i]表示i个房间的最优解
+3.边界转态值：n=1时 最优解就是nums[0]
+              n=2时 最优解就是max(nums[0],nums[1])
+4.状态转移方程：
+    dp[i] = max(dp[i-1],nums[i]+dp[i-2])
+
+
+'''
+
+class Solution(object):
+    def rob(self, nums):
+        dp = [0 for _ in range(len(nums))]
+        if len(nums) == 0:
+            return 0
+        else:
+            if len(nums) == 1:
+                return nums[0]
+            else:
+                if len(nums) > 1:
+                    dp[0] = nums[0]
+                    if nums[0] > nums[1]:
+                        dp[1] = nums[0]
+                    else:
+                        dp[1] = nums[1]  #以上是确定边界状态
+                    if len(nums) > 2:
+                        for i in range(2,len(nums)): #根据状态转移方程来迭代
+                            if nums[i] + dp[i-2] > dp[i-1]:
+                                dp[i] = nums[i] + dp[i-2]
+                                nums[i] = -1
+                            else:
+                                dp[i] = dp[i-1]
+        return dp[len(nums)-1]
