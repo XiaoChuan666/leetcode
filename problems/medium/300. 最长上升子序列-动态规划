@@ -1,0 +1,23 @@
+'''
+
+动态规划：时间复杂度O(n^2)，空间复杂度O(n)
+1.原问题：长为n的数组中找出最长上升子序列；子问题：找出以nums[i]结尾且长为i的数组中的最长上升子序列，显然，nums[i]就是该上升子序列的最大值。
+2.dp[i]表示以nums[i]结尾且长为i的数组中的最长上升子序列的长度。
+3.边界值：dp[0] = 1
+
+'''
+
+
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        if len(nums) == 0:
+            return 0
+        dp = [1 for _ in range(len(nums))]
+        mx = 1
+        for i in range(1,len(nums)):
+            for j in range(0,i):
+                if nums[i] > nums[j] and dp[i] < dp[j] + 1:
+                    dp[i] = dp[j] + 1
+            if mx < dp[i]:
+                mx = dp[i]
+        return mx
