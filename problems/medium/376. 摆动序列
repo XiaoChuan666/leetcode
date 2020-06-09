@@ -1,0 +1,36 @@
+/*
+
+这个题其实就是寻找波峰和波谷的数量。
+时间复杂度O(n)，空间复杂度O(1)
+
+*/
+
+class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        int len = nums.length;
+        if(len == 0)return 0;
+        if(len == 1)return 1;
+        int lens = 1,increase = 0,decrease = 0,temp = nums[0];
+        for(int i = 1;i < nums.length;i++){
+            if(nums[i] < temp){
+                if(increase == 0 && decrease == 0)lens++;
+                decrease = 1;
+                if(increase == 1){
+                    increase = 0;
+                    lens++;
+                }
+            }
+            else if(nums[i] > temp){
+                if(increase == 0 && decrease == 0)lens++;
+                increase = 1;
+                if(decrease == 1){
+                    decrease = 0;
+                    lens++;
+                }
+            }
+            temp = nums[i];
+        }
+
+        return lens;
+    }
+}
