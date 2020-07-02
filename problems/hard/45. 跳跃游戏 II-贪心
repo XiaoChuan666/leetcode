@@ -1,0 +1,39 @@
+'''
+
+定义arr[]数组，arr[i]表示从i处能够到达的最远地方：即arr[i] = i + nums[i]。
+遍历arr[i]时，需要找出在数组arr中，下标范围为(i+1,i+nums)的arr的最大值，即找出了下一跳能跳的最远地方。
+最后，如果能够跳到>=len(nums)-1的地方，则可以跳到最后一格。
+
+贪心：每一跳都跳到能跳最远距离的那一格。
+时间复杂度：O(n^2)，空间复杂度：O(n)
+
+'''
+
+class Solution(object):
+    def jump(self, nums):
+        a = len(nums)
+        if a == 1:
+            return 0
+        arr = [0 for _ in range(a)]
+
+        for i in range(0,a):
+            arr[i] = i + nums[i]
+            if arr[i] > a-1:
+                arr[i] = a-1
+
+        i = 0
+        count = 0
+        while i < a:
+            maxs = arr[i]
+            temp = i
+            for j in range(i+1,arr[i]+1):
+                if maxs <= arr[j] and nums[j] != 0:
+                    maxs = arr[j]
+                    i = j
+            count += 1
+            if maxs >= a-1:
+                if i == a-1:
+                    return count
+                else:
+                    return count + 1
+                
