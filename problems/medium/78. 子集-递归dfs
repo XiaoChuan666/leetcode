@@ -1,0 +1,22 @@
+'''
+
+深度优先搜索：画出递归树，遍历即可。
+时间复杂度：O(n^2)
+
+'''
+
+class Solution(object):
+    def subsets(self, nums):
+        result = []
+        def dfs(self, arr, nums, result):
+            if len(nums) <= 0:
+                result.append([]) #不能直接append(arr)，因为append直接将arr的地址添加进去，导致后面arr值的改变会改变result中的arr的值。
+                result[-1].extend(arr)
+                return 0
+            arr.append(nums[0])
+            dfs(self, arr, nums[1:], result)
+            arr.pop()
+            dfs(self, arr, nums[1:], result)
+
+        dfs(self, [], nums, result)
+        return result
