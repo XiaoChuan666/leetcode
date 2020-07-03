@@ -1,0 +1,48 @@
+'''
+
+贪心：每次选择能到达的加油站中加油量最多的加油站，直到过了终点站为止
+时间复杂度O(n^2)，空间复杂度O(1)
+
+'''
+class Solution(object):
+    def minRefuelStops(self, target, startFuel, stations):
+        lens = len(stations)
+        if lens == 0:
+            if startFuel >= target:
+                return 0
+            else:
+                return -1
+        if startFuel >= target:
+            return 0
+        add_list = []
+        miles = startFuel
+        i = 0
+        while True:
+            maxs = -1
+            mark = -1
+            farest_station = 0
+            if add_list:
+                farest_station = stations[max(add_list)][0]
+            while i < lens and miles >= stations[i][0]:
+                if maxs < stations[i][1] and i not in add_list:
+                    maxs = stations[i][1]
+                    mark = i
+                i += 1
+            if mark != -1:
+                if add_list:
+                    if mark > max(add_list):
+                        miles = miles + stations[mark][1]
+                    else:
+                        miles = miles + stations[mark][1]
+                else:
+                    miles = miles + stations[mark][1]
+                    
+                add_list.append(mark)
+                print(add_list)
+            print(miles)
+            if miles >= target: #miles是加了油之后的
+                return len(add_list)
+            else:
+                i = 0
+            if mark == -1:
+                return -1
