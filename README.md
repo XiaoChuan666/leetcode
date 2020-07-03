@@ -1,4 +1,4 @@
-# leecode
-[![](https://img.shields.io/badge/Leecode-10-green.svg)](https://leetcode-cn.com/)
+# leetcode
+[![](https://img.shields.io/badge/Leetcode-10-green.svg)](https://leetcode-cn.com/)
 
-there are answers of leecode problems.
+there are answers of leetcode questions.
