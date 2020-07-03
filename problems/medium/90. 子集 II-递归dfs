@@ -1,0 +1,24 @@
+'''
+
+递归dfs:
+因为有重复元素，所以先对nums进行排序。
+然后再画出递归树，使用深度优先遍历。
+
+'''
+class Solution(object):
+    def subsetsWithDup(self, nums):
+        nums.sort()
+        result = []
+        def dfs(self, arr, nums, result):
+            if len(nums) <= 0:
+                if arr not in result:
+                    result.append([]) #不能直接append(arr)，因为append直接将arr的地址添加进去，导致后面arr值的改变会改变result中的arr的值。
+                    result[-1].extend(arr)
+                return 0
+            arr.append(nums[0])
+            dfs(self, arr, nums[1:], result)
+            arr.pop()
+            dfs(self, arr, nums[1:], result)
+
+        dfs(self, [], nums, result)
+        return result
