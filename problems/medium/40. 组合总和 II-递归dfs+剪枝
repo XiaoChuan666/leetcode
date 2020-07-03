@@ -1,0 +1,34 @@
+'''
+递归+深度优先搜索+剪枝，不然会超时。
+先排序（便于剪枝和去重），画出递归树，适当剪枝，再深度优先遍历。
+'''
+
+class Solution(object):
+    def combinationSum2(self, candidates, target):
+        result = []
+        target1 = target
+        candi = []
+        for i in range(0,len(candidates)):
+            if candidates[i] <= target:
+                candi.append(candidates[i])
+        candi.sort()
+        def dfs(self, candidates, arr, result, target1):
+            if not candidates or target1 == 0:
+                if arr not in result and target1 == 0:
+                    result.append([])
+                    result[-1].extend(arr)
+                    target1 = target
+                return 0
+            
+            if target1 >= candidates[0]:
+                arr.append(candidates[0])
+                target1 -= candidates[0]
+                dfs(self, candidates[1:], arr, result, target1)
+                arr.pop()
+                target1 += candidates[0]
+                dfs(self, candidates[1:], arr, result, target1)
+            else:
+                return 0
+        arr = []
+        dfs(self, candi, arr, result, target1)
+        return result
