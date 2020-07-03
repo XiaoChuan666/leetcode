@@ -1,0 +1,22 @@
+class Solution:
+    def generateParenthesis(self, n):
+        result = []
+        def backtrack(self, arr, value):
+            if len(arr) == 2*n:
+                if value == 0:
+                    result.append(''.join(arr))
+                return
+            if value >= 0:
+                arr.append('(')
+                value += 1
+                backtrack(self, arr, value)
+                arr.pop()
+
+                arr.append(')')
+                value -= 2
+                backtrack(self, arr, value)
+                arr.pop()
+            else:
+                return
+        backtrack(self, [], 0)
+        return result
