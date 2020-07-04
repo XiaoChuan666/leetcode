@@ -1,0 +1,163 @@
+'''
+
+递归dfs+回溯，没用剪枝，目前还不知道哪些可以剪。。。
+
+'''
+class Solution(object):
+    def solveNQueens(self, n):
+        if n == 1:
+            return [["Q"]]
+        if n > 1 and n < 4:
+            return []
+        global board
+        global flag
+        global result
+        board = [[0 for _ in range(n)] for _ in range(n)]
+        result = []
+        flag = 0
+        def stretch(x,y,l,r,u,d,sign):
+            if l == 1 and r == 0 and u == 0 and d == 0 and y-1 >= 0:
+                if board[x][y-1] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x][y-1] += 1
+                    stretch(x,y-1,1,0,0,0,1)
+                else:
+                    board[x][y-1] -= 1
+                    stretch(x,y-1,1,0,0,0,0)
+            elif l == 0 and r == 1 and u == 0 and d == 0 and y+1 < n:
+                if board[x][y+1] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x][y+1] += 1
+                    stretch(x,y+1,0,1,0,0,1)
+                else:
+                    board[x][y+1] -= 1
+                    stretch(x,y+1,0,1,0,0,0)
+            elif l == 0 and r == 0 and u == 1 and d == 0 and x-1 >= 0:
+                if board[x-1][y] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x-1][y] += 1
+                    stretch(x-1,y,0,0,1,0,1)
+                else:
+                    board[x-1][y] -= 1
+                    stretch(x-1,y,0,0,1,0,0)
+            elif l == 0 and r == 0 and u == 0 and d == 1 and x+1 < n:
+                if board[x+1][y] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x+1][y] += 1
+                    stretch(x+1,y,0,0,0,1,1)
+                else:
+                    board[x+1][y] -= 1
+                    stretch(x+1,y,0,0,0,1,0)
+            elif l == 1 and r == 0 and u == 1 and d == 0 and y-1 >= 0 and x-1 >= 0:
+                if board[x-1][y-1] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x-1][y-1] += 1
+                    stretch(x-1,y-1,1,0,1,0,1)
+                else:
+                    board[x-1][y-1] -= 1
+                    stretch(x-1,y-1,1,0,1,0,0)
+            elif l == 1 and r == 0 and u == 0 and d == 1 and y-1 >= 0 and x+1 < n:
+                if board[x+1][y-1] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x+1][y-1] += 1
+                    stretch(x+1,y-1,1,0,0,1,1)
+                else:
+                    board[x+1][y-1] -= 1
+                    stretch(x+1,y-1,1,0,0,1,0)
+            elif l == 0 and r == 1 and u == 0 and d == 1 and y+1 < n and x+1 < n:
+                if board[x+1][y+1] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x+1][y+1] += 1
+                    stretch(x+1,y+1,0,1,0,1,1)
+                else:
+                    board[x+1][y+1] -= 1
+                    stretch(x+1,y+1,0,1,0,1,0)
+            elif l == 0 and r == 1 and u == 1 and d == 0 and y+1 < n and x-1 >= 0:
+                if board[x-1][y+1] >= 10000:
+                    flag = 1
+                if sign == 1:
+                    board[x-1][y+1] += 1
+                    stretch(x-1,y+1,0,1,1,0,1)
+                else:
+                    board[x-1][y+1] -= 1
+                    stretch(x-1,y+1,0,1,1,0,0)
+            else:return
+        def remove(board,x,y):
+            board[x][y] -= 10000
+            stretch(x,y,0,1,0,0,0)
+            stretch(x,y,1,0,0,0,0)
+            stretch(x,y,0,0,1,0,0)
+            stretch(x,y,0,0,0,1,0)
+            stretch(x,y,1,0,1,0,0)
+            stretch(x,y,1,0,0,1,0)
+            stretch(x,y,0,1,0,1,0)
+            stretch(x,y,0,1,1,0,0)
+        def place_the_queen(x,y):
+            global board
+            global flag
+            global count
+            if x >= 0 and x < n and y >= 0 and y < n:
+                if board[x][y] < 1:
+                    flag = 0
+                    board[x][y] += 10000
+                    stretch(x,y,0,1,0,0,1)
+                    stretch(x,y,1,0,0,0,1)
+                    stretch(x,y,0,0,1,0,1)
+                    stretch(x,y,0,0,0,1,1)
+                    stretch(x,y,1,0,1,0,1)
+                    stretch(x,y,1,0,0,1,1)
+                    stretch(x,y,0,1,0,1,1)
+                    stretch(x,y,0,1,1,0,1)
+                else:
+                    flag = 1
+                    return -1
+            if flag == 1:
+                remove(board,x,y)
+                flag = 0
+                return -1
+            else:
+                return 1
+        def find_queen(board,row):
+            for i in range(0,n):
+                if board[row][i] >= 10000:
+                    return i
+            return -1
+
+        def to_result(result,board):
+            result.append([])
+            for i in board:
+                result[-1].append("")
+                for j in i:
+                    if j >= 10000:
+                        result[-1][-1] += 'Q'
+                    else:
+                        result[-1][-1] += '.'
+            
+        def backtrack(board,x,y):
+            global result
+            if y < n:
+                if place_the_queen(x,y) == 1:
+                    if x == n-1:
+                        to_result(result,board)
+                        remove(board,x,y)
+                        y = n
+                    else:
+                        backtrack(board,x+1,0)
+                else:
+                    backtrack(board,x,y+1)
+            if y == n:
+                column = find_queen(board,x-1)
+                remove(board,x-1,column)
+                if x-1 == 0 and column+1 == n:
+                    return
+                else:
+                    backtrack(board,x-1,column+1)
+        backtrack(board,0,0)
+        return result
