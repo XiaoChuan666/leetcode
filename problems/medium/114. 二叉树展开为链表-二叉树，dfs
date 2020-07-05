@@ -1,0 +1,41 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+'''
+
+dfs，以从底层到顶层的顺序，依次展开。
+
+'''
+class Solution(object):
+    def flatten(self, root):
+        if root == None:
+            return
+        def dfs(root):
+            if root.left != None:
+                dfs(root.left)
+            if root.right != None:
+                dfs(root.right)
+            if root.left != None and root.right != None:
+                r = root
+                if root.left.right != None:
+                    r = root.left.right
+                    while r.right != None:
+                        r = r.right
+                    r.right = root.right
+                    root.right = root.left
+                    root.left = None
+                else:
+                    root.left.right = root.right
+                    root.right = root.left
+                    root.left = None
+            elif root.left != None and root.right == None:
+                root.right = root.left
+                root.left = None
+            elif root.left == None and root.right != None:
+                pass
+            else:
+                return 
+        dfs(root)
