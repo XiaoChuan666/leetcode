@@ -1,0 +1,62 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+'''
+
+中序遍历，然后遇到p时，把当前所走的路径添加到一个list1里面；遇到q时，把当前所走的路径添加到list2里面。
+最后得到两条路径，找出最深层的公共祖先即可。
+
+'''
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        if root == None:
+            return
+        route1 = []
+        route2 = []
+        def dfs(root, p, q, temp_route):
+            if root.left == None and root.right == None:
+                temp_route.append(root)
+                if root == p and not route1:
+                    route1.append([])
+                    route1[-1].extend(temp_route)
+                elif root == q and not route2:
+                    route2.append([])
+                    route2[-1].extend(temp_route)
+                temp_route.pop()
+                return
+            if root.left != None:
+                temp_route.append(root)
+                if root == p and not route1:
+                    route1.append([])
+                    route1[-1].extend(temp_route)
+                elif root == q and not route2:
+                    route2.append([])
+                    route2[-1].extend(temp_route)
+                dfs(root.left, p, q, temp_route)
+                temp_route.pop()
+            if root.right != None:
+                temp_route.append(root)
+                if root == p and not route1:
+                    route1.append([])
+                    route1[-1].extend(temp_route)
+                elif root == q and not route2:
+                    route2.append([])
+                    route2[-1].extend(temp_route)
+                dfs(root.right, p, q, temp_route)
+                temp_route.pop()
+        dfs(root, p, q, [])
+        if route1 and route2:
+            route1[0].reverse()
+            route2[0].reverse()
+            for i in route1[0]:
+                for j in route2[0]:
+                    if i == j:
+                        return i
+        elif not route1 and route2:
+            return q
+        elif not route2 and route1:
+            return p
+        return
