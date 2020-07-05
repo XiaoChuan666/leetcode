@@ -1,0 +1,64 @@
+方法一：
+'''
+
+归并排序，求逆序数。
+要扩展原数组，加上顺序标记，否则排序之后会丢失顺序。
+时间复杂度:O(nlogn)
+'''
+class Solution(object):
+    def countSmaller(self, nums):
+        if not nums:
+            return []
+        def merge(list1, list2, index):
+            arr = []
+            len1 = len(list1)
+            len2 = len(list2)
+            i = 0
+            j = 0
+            while i < len1 and j < len2:
+                if list1[i][index] > list2[j][index]:
+                    arr.append(list2[j])
+                    j += 1
+                else:
+                    if index == 0:
+                        list1[i][2] += j
+                    arr.append(list1[i])
+                    i += 1
+            while i < len1:
+                if index == 0:
+                    list1[i][2] += j
+                arr.append(list1[i])
+                i += 1
+            while j < len2:
+                arr.append(list2[j])
+                j += 1
+            return arr
+        def merg_sort(a, index):
+            len_a = len(a)
+            if len_a <= 1:
+                return a
+            list2 = merg_sort(a[len_a/2:],index)
+            list1 = merg_sort(a[:len_a/2],index)
+            return merge(list1, list2, index)
+        temp = []
+        len_nums = len(nums)
+        for i in range(0,len_nums):
+            temp.append([nums[i],i,0])
+        temp = merg_sort(temp,0)
+        temp = merg_sort(temp,1)
+        return zip(*temp)[2]
+方法二：
+'''
+二分查找，时间复杂度也是O(nlogn)
+'''
+class Solution(object):
+    def countSmaller(self, nums):
+        result = []
+        arr = []
+        nums.reverse()
+        for i in nums:
+            index = bisect.bisect_left(arr, i) #这是二分查找，返回的是插入的位置
+            arr.insert(index, i) #插叙有序数组arr
+            result.append(index) #index就是逆序数了
+        result.reverse()
+        return result
