@@ -1,0 +1,54 @@
+'''
+
+dfs：方法太笨了，就算剪枝也是勉强通过。
+
+'''
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        if numCourses <= 1:
+            return True
+        course = [[[],False] for _ in range(numCourses)]
+        for i in prerequisites:
+            course[i[1]][0].append(i[0])
+        global flag
+        flag = True
+        def dfs(n, course, offset, origin, visited):
+            global flag
+            if not flag:
+                return
+            if n == len(course):
+                return
+            if not course[n][0]:
+                return
+            if n not in visited:
+                visited.append(n)
+            elif n in visited and offset == 0:
+                print(visited,n)
+                visited.remove(n)
+                return
+            if offset < len(course[n][0]):
+                if origin == course[n][0][offset]:
+                    flag = False
+                    return
+                dfs(course[n][0][offset], course, 0, origin, visited)
+                if offset+1 < len(course[n][0]):
+                    if origin == course[n][0][offset+1]:
+                        flag = False
+                        return
+                    dfs(n, course, offset+1, origin, visited)
+        i = 0
+        for i in range(0,numCourses):
+            visited = []
+            if course[i][0] and not course[i][1]:
+                dfs(i, course, 0, i, visited)
+                if not flag:
+                    return False
+                else:
+                    for i in visited:
+                        if not course[i][1]:
+                            course[i][1] = True
+        for i in course:
+            if i[0] and not i[1]:
+                return False
+        return True
