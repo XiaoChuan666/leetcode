@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ /*
+dfs遍历二叉树，从左至右。每个元素都有个deep（深度），只需将root.val放入result.get(deep)数组中即可。
+时间复杂度O（n），击败100%用户。
+ */
+class Solution {
+    public static List<List<Integer>> result;
+    public static void dfs(TreeNode root,int deep){
+        if(root.left == null && root.right == null)return;
+        if(root.left!=null){
+            if(deep+1 > (result.size())-1)result.add(new ArrayList<Integer>());
+            result.get(deep+1).add(root.left.val);
+            dfs(root.left,deep+1);
+        }
+        if(root.right!=null){
+            if(deep+1 > (result.size())-1)result.add(new ArrayList<Integer>());
+            result.get(deep+1).add(root.right.val);
+            dfs(root.right,deep+1);
+        }
+    }
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        result = new ArrayList<List<Integer>>();
+        if(root == null)return result;
+        result.add(new ArrayList<Integer>());
+        result.get(0).add(root.val);
+        dfs(root,0);
+        return result;
+    }
+}
