@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ /*
+ 
+ 前序遍历，自底向上，时间复杂度为O(n)
+ 
+ */
+class height{
+    int h;
+    boolean flag;
+
+    public height(int h, boolean flag){
+        this.h = h;
+        this.flag = flag;
+    }
+}
+class Solution {
+    public static height judge(TreeNode root){
+        if(root == null)return new height(-1, true);
+        height left = judge(root.left);
+        if(!left.flag)return new height(-1,false);
+        height right = judge(root.right);
+        if(!right.flag)return new height(-1,false);
+
+        if(Math.abs(left.h-right.h) > 1)return new height(-1,false);
+        return new height(Math.max(left.h,right.h)+1,true);
+    }
+    public boolean isBalanced(TreeNode root) {
+        return judge(root).flag;
+    }
+}
