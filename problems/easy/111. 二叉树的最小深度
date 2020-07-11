@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ /*
+ 时间复杂度O（n），超过100%用户。
+ 一个坑：在LeetCode中，Java中定义全局静态变量的时候，一定要在它给的函数里面初始化。
+ */
+class Solution {
+    public static int min;
+    public static void dfs(TreeNode root,int current){
+        if(root.left == null && root.right == null){
+            if(current < min)min = current;
+            return;
+        }
+        if(root.left!=null)dfs(root.left,current+1);
+        if(root.right!=null)dfs(root.right,current+1);
+    }
+    public int minDepth(TreeNode root) {
+        this.min = (1<<31)-1;
+        if(root == null)return 0;
+        dfs(root,1);
+        return min;
+    }
+}
