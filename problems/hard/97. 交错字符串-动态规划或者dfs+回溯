@@ -1,0 +1,43 @@
+/*
+动态规划：时间复杂度O(n*m)，m，n分别为s1和s2的长度；空间复杂度O(m*n)。
+1.定义一个(s1.length()+1)*(s2.length()+1)规格的二维数组dp，dp[i][j]表示s1的前i个元素和s2的前j个元素能否组合成s3的前i+j个元素。
+2.状态转移：
+    情况1：dp[i-1][j]为true(表示s1的前i-1个元素和s2的前j个元素能够组合成s3的前i+j-1个元素)，那么只需要s1[i-1]==s3[i+j-1](s1的第i个元素与s3的第i+j-1个元素相等)，就可得出“s1的前i个元素和s2的前j个元素能否组合成s3的前i+j个元素”这样的结论，即dp[i][j]=true。
+    情况2：dp[i][j-1]为true(表示s1的前i个元素和s2的前j-1个元素能够组合成s3的前i+j-1个元素)，那么只需要s2[j-1]==s3[i+j-1](s2的第j个元素与s3的第i+j-1个元素相等)，就可得出“s1的前i个元素和s2的前j个元素能否组合成s3的前i+j个元素”这样的结论，即dp[i][j]=true。
+    综上，状态转移方程为：
+        if(dp[i][j-1] && s2.charAt(j-1) == s3.charAt(i+j-1) || dp[i-1][j] && s1.charAt(i-1) == s3.charAt(i+j-1))
+            dp[i][j] = true;
+3.边界情况：
+    若s3.length() != s1.length() + s2.length()，则返回false。
+下面给出打印该二维数组的代码：
+    for(boolean[] i:dp){
+        for(boolean j:i){
+            System.out.print(j);
+            System.out.print("  ");
+        }
+        System.out.print("\r\n");
+    }
+*/
+
+class Solution {
+    public boolean isInterleave(String s1, String s2, String s3) {
+        int s1_len = s1.length();
+        int s2_len = s2.length();
+        int s3_len = s3.length();
+        if(s3_len != s1_len + s2_len)return false;
+        if(s3_len == 0){
+            if(s1_len == 0 && s2_len == 0)return true;
+            else return false;
+        }
+        boolean[][] dp = new boolean[s1_len+1][s2_len+1];
+        dp[0][0] = true;
+        for(int i=1;i < s1_len+1;i++)
+            if(dp[i-1][0] && s1.charAt(i-1) == s3.charAt(i-1))dp[i][0] = true;
+        for(int i=1;i < s2_len+1;i++)
+            if(dp[0][i-1] && s2.charAt(i-1) == s3.charAt(i-1))dp[0][i] = true;
+        for(int i=1;i < s1_len+1;i++)
+            for(int j=1;j < s2_len+1;j++)
+                if(dp[i][j-1] && s2.charAt(j-1) == s3.charAt(i+j-1) || dp[i-1][j] && s1.charAt(i-1) == s3.charAt(i+j-1))dp[i][j] = true;
+        return dp[s1_len][s2_len];
+    }
+}
