@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ //中序遍历，看得到的list是否含有逆序的元素。
+class Solution {
+    List<TreeNode> temp;
+    public boolean isValidBST(TreeNode root) {
+        if(root == null)return true;
+        temp = new ArrayList<TreeNode>();
+        dfs(root);
+        int size = temp.size();
+        if(size == 1)return true;
+        int min = temp.get(0).val;
+        for(int i=1;i<size;i++){
+            if(min < temp.get(i).val)min = temp.get(i).val;
+            else return false;
+        }
+        return true;
+    }
+    public void dfs(TreeNode root){
+        if(root == null)return;
+        dfs(root.left);
+        temp.add(root);
+        dfs(root.right);
+    }
+}
