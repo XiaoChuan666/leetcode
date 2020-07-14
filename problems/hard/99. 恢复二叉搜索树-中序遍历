@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+//中序遍历，将每一个node保存到list里面，然后对list中的逆序的node的值交换。
+class Solution {
+    List<TreeNode> list;
+    public void recoverTree(TreeNode root) {
+        list = new ArrayList<TreeNode>();
+        inorder(root);
+        int x=-1,y=-1;
+        for(int i=0;i<list.size()-1;i++){
+            if(list.get(i).val > list.get(i+1).val){
+                if(x==-1){
+                    x = i;
+                    y = i+1;
+                }else y = i+1;
+            }
+        }
+        if(x!=-1 && y!=-1){
+            int temp = list.get(x).val;
+            list.get(x).val = list.get(y).val;
+            list.get(y).val = temp;
+        }
+    }
+    public void inorder(TreeNode root){
+        if(root == null)return;
+        inorder(root.left);
+        list.add(root);
+        inorder(root.right);
+    }
+}
