@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+//一次遍历两棵树，一颗左子树，一颗右子树
+
+class Solution {
+    boolean flag;
+    public void inorder(TreeNode left, TreeNode right){
+        if(left == null && right == null)return;
+        if(left != null && right != null){
+            if(left.val == right.val){
+                inorder(left.left,right.right);
+                inorder(left.right,right.left);
+            }else flag = false;
+        }else flag = false;
+    }
+    public boolean isSymmetric(TreeNode root) {
+        flag = true;
+        if(root == null)return true;
+        if(root.left == null && root.right == null) return true;
+        else if(root.left != null && root.right != null) inorder(root.left,root.right);
+        else return false;
+        return flag;
+    }
+}
