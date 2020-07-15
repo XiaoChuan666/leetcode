@@ -1,0 +1,44 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ //快慢指针找到链表中点作为root，每次这样迭代。
+class Solution {
+    public TreeNode buildTree(ListNode head, ListNode end){
+        if(head == end)return new TreeNode(head.val);
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast!=end && fast.next != end){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        ListNode mid_pre = head;
+        while(mid_pre != slow && mid_pre.next != slow)mid_pre = mid_pre.next;
+
+        TreeNode root = new TreeNode(slow.val);
+        if(head != slow)root.left = buildTree(head, mid_pre);
+        else root.left = null;
+        root.right = buildTree(slow.next, end);
+        return root;
+    }
+    public TreeNode sortedListToBST(ListNode head) {
+        if(head == null)return null;
+        ListNode end = head;
+        while(end.next != null)end = end.next;
+        return buildTree(head, end);
+    }
+}
