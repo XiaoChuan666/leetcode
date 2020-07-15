@@ -1,0 +1,30 @@
+/*
+    dp可解，dp+dfs会超时
+    for(int[] p:arr){
+        for(int k:p){
+            System.out.print(k);
+            System.out.print("\t");
+        }
+        System.out.print("\r\n");
+    }
+
+*/
+class Solution {
+    public int numDistinct(String s, String t) {
+        int len_s = s.length();
+        int len_t = t.length();
+        if(len_s < len_t)return 0;
+        if(len_t == 0)return 1;
+        int[][] arr = new int[len_s][len_t+1];
+        int i,j;
+        for(i=0;i<len_s;i++)arr[i][0] = 1;
+        if(s.charAt(0) == t.charAt(0))arr[0][1] = 1;
+        for(i=1;i<len_s;i++){
+            for(j=1;j<len_t+1;j++){
+                if(t.charAt(j-1) == s.charAt(i))arr[i][j] = arr[i-1][j] + arr[i-1][j-1];
+                else arr[i][j] = arr[i-1][j];
+            }
+        }
+        return arr[len_s-1][len_t];
+    }
+}
