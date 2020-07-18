@@ -1,0 +1,43 @@
+//类似于八皇后那道题。
+class Solution {
+    List<List<Integer>> list1;
+    public void dfs(int[] nums, List<Integer> temp, int index, int size, int temp_size){
+        if(index >= size){
+            if(temp_size == size){
+                list1.add(new ArrayList<Integer>(temp));
+                temp.remove(temp_size - 1);
+                temp_size--;
+            }
+            int i = Arrays.binarySearch(nums, temp.get(temp_size - 1));
+            temp.remove(temp_size - 1);
+            temp_size--;
+            if(i+1 >= size && temp_size == 0)return;
+            dfs(nums, temp, i+1, size, temp_size);
+        }
+        if(index < size){
+            if(!temp.contains(nums[index])){
+                temp.add(nums[index]);
+                temp_size++;
+                dfs(nums, temp, 0, size, temp_size);
+            }else{
+                dfs(nums, temp, index+1, size, temp_size);
+            }
+        }
+    }
+    public List<List<Integer>> permute(int[] nums) {
+        list1 = new ArrayList<List<Integer>>();
+        if(nums.length == 0){
+            list1.add(new ArrayList<Integer>());
+            return list1;
+        }
+        else if(nums.length == 1){
+            List<Integer> t = new ArrayList<Integer>();
+            t.add(nums[0]);
+            list1.add(t);
+            return list1;
+        }
+        Arrays.sort(nums);
+        dfs(nums, new ArrayList<Integer>(), 0, nums.length, 0);
+        return list1;
+    }
+}
