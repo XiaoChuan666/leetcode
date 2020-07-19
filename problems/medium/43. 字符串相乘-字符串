@@ -1,0 +1,34 @@
+class Solution {
+    //加到num1上 最后返回
+    public void add(StringBuilder res, int temp2, int offset){
+        int shiWei = ((int)temp2/10);
+        int geWei = temp2%10;
+        if(offset < res.length()){
+            int ge = (int)(res.charAt(offset)-'0') + geWei;
+            res.setCharAt(offset, (char)(ge%10+'0'));
+            if(ge>=10)add(res, (int)(ge/10), offset+1);
+        }else res.append(geWei);
+        if(offset+1 < res.length()){
+            int shi = (int)(res.charAt(offset+1)-'0') + shiWei;
+            res.setCharAt(offset+1, (char)(shi%10+'0'));
+            if(shi>=10)add(res, (int)(shi/10), offset+2);
+        }else if(shiWei!=0)res.append(shiWei);
+    }
+    public String multiply(String num1, String num2) {
+        StringBuilder res = new StringBuilder();
+        int count=0;
+        for(int i=num2.length()-1;i>=0;i--){
+            int offset = count;
+            int temp1 = (int)num2.charAt(i)-'0';
+            for(int j=num1.length()-1;j>=0;j--){
+                int temp2 = (int)num1.charAt(j)-'0';
+                temp2 *= temp1;
+                add(res, temp2, offset);
+                offset++;
+            }
+            count++;
+        }
+        while(res.length()>1 && res.charAt(res.length()-1) == '0')res.deleteCharAt(res.length()-1);
+        return res.reverse().toString();
+    }
+}
