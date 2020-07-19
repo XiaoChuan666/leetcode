@@ -1,0 +1,19 @@
+class Solution {
+    public void backtrack(int n, List<Integer> temp, List<List<Integer>> res, int first){
+        if(first == n)res.add(new ArrayList<Integer>(temp));
+        for(int i=first;i<n;i++){
+            Collections.swap(temp,i,first);
+            if(!res.contains(temp))backtrack(n, temp, res, first+1);
+            Collections.swap(temp,first,i);
+        }
+    }
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> res = new LinkedList<List<Integer>>();
+        List<Integer> temp = new ArrayList<Integer>();
+        for(int i:nums)
+            temp.add(i);
+        System.out.println(temp);
+        backtrack(temp.size(), temp, res, 0);
+        return res;
+    }
+}
