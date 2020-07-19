@@ -1,0 +1,30 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        if(numRows == 1)return s;
+        StringBuilder res = new StringBuilder();
+        int step = 2*(numRows-1), little_step, len = s.length(), flag;
+        for(int i=1;i<=numRows;i++){
+            flag = 1;
+            if(i==1 || i == numRows){
+                little_step = i-1;
+                while(little_step < len){
+                    res.append(s.charAt(little_step));
+                    little_step += step;
+                }
+            }else{
+                little_step = i-1;
+                while(little_step < len){
+                    res.append(s.charAt(little_step));
+                    if(flag == 0)flag = 1; //非中间节点，则改变步伐。
+                    else flag = 0;
+                    if((numRows-i)*2 != numRows-1){
+                        if(flag == 1){
+                            little_step += step - (numRows-i)*2;
+                        }else little_step += (numRows-i)*2;
+                    }else little_step += (numRows-i)*2;
+                }
+            }
+        }
+        return res.toString();
+    }
+}
