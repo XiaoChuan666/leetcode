@@ -1,0 +1,35 @@
+class Solution {
+    public void jinwei(StringBuilder s1, int offset, int num){
+        if(offset < s1.length()){
+            int temp = (int)s1.charAt(offset)-'0'+num;
+            if(temp>=10){
+                s1.setCharAt(offset,(char)(temp%10+48));
+                jinwei(s1, offset+1, (int)(temp/10));
+            }
+            else s1.setCharAt(offset, (char)(temp+48));
+        }else s1.append(num);
+    }
+    public String addStrings(String num1, String num2) {
+        int len_num1 = num1.length();
+        int len_num2 = num2.length();
+        //保证num1比num2长
+        if(len_num1 < len_num2){
+            String result = addStrings(num2, num1);
+            return result;
+        }
+        StringBuilder s1 = new StringBuilder(num1);
+        StringBuilder s2 = new StringBuilder(num2);
+        s1.reverse();
+        s2.reverse();
+        //结果保存到长的String里面，也就是num1
+        for(int i=0;i<len_num2;i++){
+            int temp = (int)s1.charAt(i)-'0'+(int)s2.charAt(i)-'0';
+            if(temp>=10){
+                s1.setCharAt(i,(char)(temp%10+48));
+                jinwei(s1, i+1, (int)(temp/10));
+            }
+            else s1.setCharAt(i,(char)(temp+48));
+        }
+        return s1.reverse().toString();
+    }
+}
