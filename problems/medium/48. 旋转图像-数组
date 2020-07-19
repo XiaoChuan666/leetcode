@@ -1,0 +1,28 @@
+//模拟方法，没用任何花里胡哨的。
+class Solution {
+    public void rotate(int[][] matrix) {
+        int offset, i=0, j=0, temp1, temp2, k, len = matrix.length, time = (int)len/2;
+        for(k=0;k<time;k++){
+            offset = 0;
+            do{
+                //exchange 1
+                temp1 = matrix[i+offset][j+len-1];
+                matrix[i+offset][j+len-1] = matrix[i][j+offset];
+                //exchange 2
+                temp2 = matrix[i+len-1][j+len-1-offset];
+                matrix[i+len-1][j+len-1-offset] = temp1;
+                //exchange 3
+                temp1 = matrix[i+len-1-offset][j];
+                matrix[i+len-1-offset][j] = temp2;
+                //exchange 4
+                matrix[i][j+offset] = temp1;
+
+                offset++;
+
+            }while(offset < len-1);
+            i++;
+            j++;
+            len -= 2;
+        }
+    }
+}
