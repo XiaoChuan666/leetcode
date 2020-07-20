@@ -1,0 +1,55 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+
+ //遍历list放入数组，再sort生成listnode。10ms
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        int len = lists.length;
+        if(len == 0)return null;
+        List<Integer> resList = new ArrayList<Integer>();
+        for(ListNode temp:lists)
+            while(temp!=null){
+                resList.add(temp.val);
+                temp = temp.next;
+            }
+        Collections.sort(resList);
+        ListNode res = new ListNode(-1), a = res;
+        for(int i:resList){
+            res.next = new ListNode(i);
+            res = res.next;
+        }
+        //System.out.println(resList);
+        return a.next;
+    }
+}
+  /*
+ //以下是链表做法，280ms
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        int len = lists.length;
+        if(len == 0)return null;
+        ListNode res = new ListNode(-1), a = res, min = new ListNode(10000000);
+        int position, i;
+        while(true){
+            position = -1;
+            for(i=0;i<len;i++){
+                if(lists[i] != null && min.val >= lists[i].val){
+                    min = lists[i];
+                    position = i;//记录位置
+                }
+            }
+            if(position == -1)return a.next;
+            lists[position] = min.next;
+            res.next = min;
+            res = res.next;
+            min = new ListNode(10000000);
+        }
+    }
+}
+*/
