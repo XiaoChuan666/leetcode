@@ -1,0 +1,22 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+//帅气的递归
+class Solution {
+    public ListNode reverseTwo(ListNode head){
+        if(head == null || head.next==null)return head;
+        ListNode a = head, b = head.next, c = b.next;
+        b.next = a;
+        a.next = c;
+        a.next = reverseTwo(c);
+        return b;
+    }
+    public ListNode swapPairs(ListNode head) {
+        return reverseTwo(head);
+    }
+}
