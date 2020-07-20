@@ -1,0 +1,42 @@
+//dfs，和八皇后那道题很像
+class Solution {
+    Map<Integer, String> m;
+    public void dfs(List<String> res, String digits, StringBuilder temp, int len, int deep, int index){
+        if(deep == 0 && index == m.get((int)(digits.charAt(deep)-'0')).length())return;
+
+        if(index == m.get((int)(digits.charAt(deep)-'0')).length()){
+            //回到上一层
+            int pre_index = m.get((int)(digits.charAt(deep-1)-'0')).indexOf(temp.charAt(temp.length()-1));
+            temp.deleteCharAt(temp.length()-1);//删除最后一位
+            dfs(res, digits, temp, len, deep-1, pre_index+1);
+            return;
+        }
+        if(deep != len-1){
+            temp.append(m.get((int)(digits.charAt(deep)-'0')).charAt(index));
+            dfs(res, digits, temp, len, deep+1, 0);//去下一层
+        }
+        else{
+            temp.append(m.get((int)(digits.charAt(deep)-'0')).charAt(index));
+            res.add(temp.toString());
+            temp.deleteCharAt(temp.length()-1);//删除最后一位
+            dfs(res, digits, temp, len, deep, index+1);//去同层的右边
+            return;
+        }
+    }
+    public List<String> letterCombinations(String digits) {
+        m = new HashMap<Integer, String>();
+        m.put(2,"abc");
+        m.put(3,"def");
+        m.put(4,"ghi");
+        m.put(5,"jkl");
+        m.put(6,"mno");
+        m.put(7,"pqrs");
+        m.put(8,"tuv");
+        m.put(9,"wxyz");
+        int len = digits.length();
+        List<String> res = new LinkedList<String>();
+        if(len == 0)return res;
+        dfs(res, digits, new StringBuilder(), len, 0, 0);
+        return res;
+    }
+}
