@@ -1,0 +1,28 @@
+//dfs竟然过了
+class Solution {
+    int min, res;
+    public void dfs(Stack<Integer> temp, int len, int[] nums, int size, int deep, int target){
+        if(size == deep || len >=3){
+            if(len == 3){
+                int t = Math.abs(temp.get(0)+temp.get(1)+temp.get(2) - target);
+                if(min > t){
+                    min = t;
+                    res = temp.get(0)+temp.get(1)+temp.get(2);
+                }
+            }
+            return;
+        }
+        if(min == 0)return;
+        temp.push(nums[deep]);
+        dfs(temp, len+1, nums, size, deep+1, target);
+        temp.pop();
+
+        dfs(temp, len, nums, size, deep+1, target);
+    }
+    public int threeSumClosest(int[] nums, int target) {
+        min = 10000000;
+        res = 0;
+        dfs(new Stack<Integer>(), 0, nums, nums.length, 0, target);
+        return res;
+    }
+}
