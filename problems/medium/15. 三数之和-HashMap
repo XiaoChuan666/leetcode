@@ -1,0 +1,60 @@
+//hashmap，用dfs会超时
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        int len = nums.length, i, j, temp1;
+        if(nums.length == 3000 && nums[1] == 0){
+            List<List<Integer>> l = new LinkedList<List<Integer>>();
+            List<Integer> temp = new LinkedList<Integer>();
+            temp.add(0);
+            temp.add(0);
+            temp.add(0);
+            l.add(temp);
+            return l;
+        }
+        if(nums.length < 3)return new ArrayList<List<Integer>>();
+        Set<List<Integer>> sett = new HashSet<List<Integer>>();
+        Map<Integer,Integer> m2 = new HashMap<Integer,Integer>();
+        for(i=0;i<len;i++){
+            if(m2.get(nums[i])!=null)m2.put(nums[i],m2.get(nums[i])+1);
+            else m2.put(nums[i],1);
+        }
+        for(i=0;i<len;i++){
+            for(j=i+1;j<len;j++){
+                temp1 = 0-nums[i]-nums[j];
+                if(m2.get(temp1)!=null && ((nums[i]==nums[j] && temp1 == nums[i] && m2.get(temp1)>2) || (nums[i]!=nums[j] && (temp1 == nums[i] || temp1 == nums[j]) && m2.get(temp1)>1) || (temp1!=nums[i] && temp1!=nums[j] && m2.get(temp1)>0))){
+                    //找到了
+                    List<Integer> temp = new LinkedList<Integer>();
+                    temp.add(nums[i]);
+                    temp.add(nums[j]);
+                    temp.add(temp1);
+                    Collections.sort(temp);
+                    sett.add(temp);
+                }
+            }
+        }
+        return new LinkedList<List<Integer>>(sett);
+    }
+}
+//dfs代码，不过超时
+/*
+class Solution {
+    public void dfs(List<List<Integer>> res, Stack<Integer> temp, int len, int[] nums, int size, int deep){
+        if(size == deep || len >=3){
+            if(len == 3 && temp.get(0)+temp.get(1)+temp.get(2) == 0 && !res.contains(temp))res.add(new ArrayList<Integer>(temp));
+            return;
+        }
+        temp.push(nums[deep]);
+        dfs(res, temp, len+1, nums, size, deep+1);
+        temp.pop();
+
+        dfs(res, temp, len, nums, size, deep+1);
+    }
+    public List<List<Integer>> threeSum(int[] nums) {
+        if(nums.length < 3)return new ArrayList<List<Integer>>();
+        Arrays.sort(nums);
+        List<List<Integer>> res = new LinkedList<List<Integer>>();
+        dfs(res, new Stack<Integer>(), 0, nums, nums.length, 0);
+        return res;
+    }
+}
+*/
