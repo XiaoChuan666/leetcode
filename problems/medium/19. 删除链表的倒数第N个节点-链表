@@ -1,0 +1,24 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+ //定义一个rear节点，在head的基础上，rear后移n位。
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode rear = head, p = head;
+        while(n--!=0){
+            if(rear.next!=null)rear = rear.next;
+            else return head.next;
+        }
+        while(rear.next!=null){
+            p = p.next;
+            rear = rear.next;
+        }
+        if(p.next!=null)p.next = p.next.next;
+        return head;
+    }
+}
