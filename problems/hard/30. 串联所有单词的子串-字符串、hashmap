@@ -3,33 +3,32 @@ class Solution {
     public List<Integer> findSubstring(String s, String[] words) {
         if(s==null || words.length==0)return new ArrayList<Integer>();
         List<Integer> result = new ArrayList<Integer>();//保存结果
-        int i, j, len_s = s.length(), len_words = 0, len_words_each = words[0].length(), flag;
-        
+        int i, j, value, len_s = s.length(), len_words = 0, len_words_each = words[0].length(), flag;
+        String sub1, sub2;
         for(String temp:words)len_words+=temp.length();
         if(len_words > len_s)return result;
+        Map<String,Integer> map2 = new HashMap<String,Integer>(), map;//重置map
+        for(String temp:words){
+            if(map2.containsKey(temp))map2.put(temp,map2.get(temp)+1);
+            else map2.put(temp,1);
+        }
         for(i=0;i<len_s;i++){
             flag = 1;
             if(i+len_words <= len_s){
-                Map<String,Integer> map = new HashMap<String,Integer>();//重置map
-                for(String temp:words){
-                    if(map.containsKey(temp))map.put(temp,map.get(temp)+1);
-                    else map.put(temp,1);
-                }
-                String temp = s.substring(i,i+len_words);
-                for(j=0;j<temp.length();j++){
-                    if(j+len_words_each <= temp.length()){
-                        String sub = temp.substring(j,j+len_words_each);
-                        if(map.containsKey(sub)){
-                            if(map.get(sub) == 1)map.remove(sub);
-                            else map.put(sub,map.get(sub)-1);
-                            j = j+len_words_each-1;
+                map =  new HashMap<String,Integer>(map2);//重置map
+                sub1 = s.substring(i,i+len_words);
+                for(j=0;j<len_words;j++){
+                    if(j+len_words_each <= len_words){
+                        sub2 = sub1.substring(j,j+len_words_each);
+                        if((value = map.getOrDefault(sub2,-1)) > 0){
+                            map.put(sub2,value-1);
+                            j += len_words_each-1;
                         }else{
                             flag = 0;
                             break;
                         }
                     }
                 }
-
             }else break;
             if(flag == 1)result.add(i);
         }
