@@ -1,0 +1,67 @@
+//滑动窗口，每次维护一个长度为words所有单词总长的s子串，在每个子串中search words中的每个单词。
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        if(s==null || words.length==0)return new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<Integer>();//保存结果
+        int i, j, len_s = s.length(), len_words = 0, len_words_each = words[0].length(), flag;
+        
+        for(String temp:words)len_words+=temp.length();
+        if(len_words > len_s)return result;
+        for(i=0;i<len_s;i++){
+            flag = 1;
+            if(i+len_words <= len_s){
+                Map<String,Integer> map = new HashMap<String,Integer>();//重置map
+                for(String temp:words){
+                    if(map.containsKey(temp))map.put(temp,map.get(temp)+1);
+                    else map.put(temp,1);
+                }
+                String temp = s.substring(i,i+len_words);
+                for(j=0;j<temp.length();j++){
+                    if(j+len_words_each <= temp.length()){
+                        String sub = temp.substring(j,j+len_words_each);
+                        if(map.containsKey(sub)){
+                            if(map.get(sub) == 1)map.remove(sub);
+                            else map.put(sub,map.get(sub)-1);
+                            j = j+len_words_each-1;
+                        }else{
+                            flag = 0;
+                            break;
+                        }
+                    }
+                }
+
+            }else break;
+            if(flag == 1)result.add(i);
+        }
+        return result;
+    }
+}
+/* 超时的全排列。。。。。。。。。。。。。。。。。。。
+class Solution {
+    public void dfs(List<String> pailie, int first, int len, List<String> res){
+        if(first == len){
+            StringBuilder s = new StringBuilder();
+            for(String temp:pailie)
+                s.append(temp);
+            if(!res.contains(s.toString()))res.add(s.toString());
+        }
+        for(int i=first;i<len;i++){
+            Collections.swap(pailie, i, first);
+            dfs(pailie, first+1, len, res);
+            Collections.swap(pailie, i, first);
+        }
+    }
+    public List<Integer> findSubstring(String s, String[] words) {
+        if(s==null || words.length==0)return new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<Integer>();//保存结果
+        List<String> res = new ArrayList<String>();//保存全排列结果
+        List<String> pailie = new ArrayList<String>(Arrays.asList(words));//将String[]类型的words转为list，便于得到全排列
+        int len_words = words.length, len = s.length(), len_res, i;
+        dfs(pailie, 0, len_words, res);
+        len_res = res.get(0).length();
+        for(i=0;i<len;i++)
+            if(i+len_res <= len && res.contains(s.substring(i,i+len_res)))result.add(i);
+        return result;
+    }
+}
+*/
