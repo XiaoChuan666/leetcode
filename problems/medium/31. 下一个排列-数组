@@ -1,0 +1,43 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int len = nums.length;
+        if(len >= 2){
+            int maxValue = nums[0], maxIndex = 0, i, j, flag = 1;
+            for(i=1;i<len;i++){
+                if(maxValue <= nums[i]){
+                    maxValue = nums[i];
+                    maxIndex = i;
+                }
+            }
+            //整个字符串都是逆序，说明已经达到了最大，则返回最小。
+            for(i=0;i<len;i++)
+                if(i+1<len && nums[i] < nums[i+1])flag=0;
+            if(flag == 1){
+                Arrays.sort(nums);
+                return;
+            }
+            //最大值右边的区间若存在升序对，则找到最后一对升序，将其交换。
+            for(i=len-1;i>=maxIndex;i--){
+                if(i-1 >= maxIndex && nums[i]>nums[i-1]){
+                    for(j=len-1;j>=i;j--)if(nums[j]>nums[i-1])break;
+                    int temp = nums[j];
+                    nums[j] = nums[i-1];
+                    nums[i-1] = temp;
+                    Arrays.sort(nums, i, len);//排序也是左闭右开。
+                    return;
+                }
+            }
+            //无升序对，则交换nums[maxIndex-1]和maxIndex右边的刚好比nums[maxIndex-1]大的值。交换之后还有对maxIndex后面的数组排序。
+            while(nums[maxIndex-1]==nums[maxIndex])maxIndex--;
+            for(i=len-1;i>=maxIndex;i--){
+                if(nums[i] > nums[maxIndex-1]){
+                    int temp = nums[i];
+                    nums[i] = nums[maxIndex-1];
+                    nums[maxIndex-1] = temp;
+                    Arrays.sort(nums, maxIndex, len);
+                    return;
+                }
+            }
+        }
+    }
+}
