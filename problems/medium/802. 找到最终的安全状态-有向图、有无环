@@ -1,0 +1,66 @@
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] G) {
+        int N = G.length;
+        boolean[] safe = new boolean[N];
+
+        List<Set<Integer>> graph = new ArrayList();
+        List<Set<Integer>> rgraph = new ArrayList(); //反向的图
+        for (int i = 0; i < N; ++i) {
+            graph.add(new HashSet());
+            rgraph.add(new HashSet());
+        }
+
+        Queue<Integer> queue = new LinkedList();
+
+        for (int i = 0; i < N; ++i) {
+            if (G[i].length == 0)
+                queue.offer(i);
+            for (int j: G[i]) {
+                graph.get(i).add(j);
+                rgraph.get(j).add(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int j = queue.poll();
+            safe[j] = true;
+            for (int i: rgraph.get(j)) {
+                graph.get(i).remove(j);
+                if (graph.get(i).isEmpty())
+                    queue.offer(i);
+            }
+        }
+
+        List<Integer> ans = new ArrayList();
+        for (int i = 0; i < N; ++i) if (safe[i])
+            ans.add(i);
+
+        return ans;
+    }
+}
+/*超时代码。因为删除安全节点很麻烦。所以要将入边和出边对换，这样可以很容易的知道谁直接指向安全节点。
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int len = graph.length, i;
+        List<Integer> res = new ArrayList<Integer>();
+        List<Set<Integer>> graph2 = new ArrayList<Set<Integer>>();
+        for(i=0;i<len;i++)graph2.add(new HashSet<Integer>());
+        Queue<Integer> queue = new LinkedList();
+        for(i=0;i<len;i++){
+            if(graph[i].length == 0)queue.offer(i);
+            for(int j:graph[i])graph2.get(i).add(j);
+        }
+
+        while(!queue.isEmpty()){
+            int j = queue.poll();
+            res.add(j);
+            for(i=0;i<len;i++){
+                graph2.get(i).remove(j);
+                if(graph2.get(i).size() == 0 && !res.contains(i) && !queue.contains(i))queue.offer(i);
+            }
+        }
+        Collections.sort();
+        return res;
+    }
+}
+*/
