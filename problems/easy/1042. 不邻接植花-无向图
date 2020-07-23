@@ -1,0 +1,41 @@
+class Solution {
+    Map<Integer,List<Integer>> graph;
+    Map<Integer,Integer> flower;
+    public int[] gardenNoAdj(int N, int[][] paths) {
+        graph = new HashMap<Integer,List<Integer>>();
+        flower = new HashMap<Integer,Integer>();
+        List<Integer> available = new LinkedList<Integer>();
+        available.add(1);
+        available.add(2);
+        available.add(3);
+        available.add(4);
+
+        int i;
+        for(i=1;i<=N;i++){
+            graph.put(i,new ArrayList<Integer>());
+            flower.put(i,0);
+        }
+        //构造graph
+        for(int[] temp:paths){
+            graph.get(temp[0]).add(temp[1]);
+            graph.get(temp[1]).add(temp[0]);
+        }
+
+        for(int p:graph.keySet()){
+            if(flower.get(p)==0){
+                List<Integer> temp = new LinkedList<Integer>(available);
+                for(int j:graph.get(p)){//移除可用的花
+                    if(flower.get(j)!=0)temp.remove(new Integer(flower.get(j)));
+                }
+                flower.put(p,temp.get(0));
+            }
+        }
+        int[] res = new int[N];
+        i = 0;
+        for(int p:flower.values()){
+            res[i] = p;
+            i++;
+        }
+        return res;
+    }
+}
