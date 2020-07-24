@@ -1,0 +1,89 @@
+/*
+
+只需要遍历一遍树，从根节点依次返回字母，在上层做累加。
+
+*/
+class Solution {
+    Map<Integer,List<Integer>> g;
+    String labels;
+    int[] result;
+    public int[] dfs(int root, boolean[] visited){
+        visited[root] = true;
+        int[] count = new int[26];//26个字母
+        count[labels.charAt(root) - 'a']++;
+        for(int next:g.get(root)){
+            if(!visited[next]){
+                int[] res = dfs(next, visited);
+                for(int i=0;i<26;i++)count[i]+=res[i];
+            }
+        }
+        result[root] = count[labels.charAt(root) - 'a'];
+        return count;
+    }
+    public int[] countSubTrees(int n, int[][] edges, String labels) {
+        this.labels = labels;
+        g = new HashMap<Integer,List<Integer>>();
+        for(int i=0;i<n;i++)g.put(i,new ArrayList<Integer>());
+        for(int[] temp:edges){
+            g.get(temp[0]).add(temp[1]);
+            g.get(temp[1]).add(temp[0]);
+        }
+
+        result = new int[n];
+        boolean[] visited = new boolean[n];
+        dfs(0, visited);
+        return result;
+    }
+}
+/*超时代码
+class Solution {
+    Map<Integer,List<Integer>> g;
+    Map<Integer,Character> label;
+    Map<Integer,Integer> count;
+    List<Integer> visited;
+    public int dfs(int start, char c){
+        int num = 0;
+        count.put(start,0);
+        if(c == label.get(start))num = 1;
+        for(int i:g.get(start)){
+            if(!visited.contains(i) && count.get(i) == 1)num += dfs(i, c);
+        }
+        count.put(start,1);
+        return num;
+    }
+    public int[] countSubTrees(int n, int[][] edges, String labels) {
+        g = new HashMap<Integer,List<Integer>>();
+        label = new HashMap<Integer,Character>();
+        count = new HashMap<Integer,Integer>();
+        if(n == 1){
+            int[] res = {1};
+            return res;
+        }
+
+        for(int i=0;i<n;i++){
+            g.put(i,new ArrayList<Integer>());
+            label.put(i,labels.charAt(i));
+            count.put(i,1);
+        }
+        for(int[] temp:edges){
+            g.get(temp[0]).add(temp[1]);
+            g.get(temp[1]).add(temp[0]);
+        }
+
+        int[] res = new int[n];
+        visited = new ArrayList<Integer>();
+        List<Integer> todo = new ArrayList<Integer>();
+        todo.add(0);
+
+        while(!todo.isEmpty()){
+            for(int i=0;i<todo.size();i++){
+                visited.add(todo.get(i));
+                res[todo.get(i)] = dfs(todo.get(i), label.get(todo.get(i)));
+                for(int j:g.get(todo.get(i)))if(!visited.contains(j))todo.add(j);
+                todo.remove(i);
+            }
+        }
+        return res;
+    }
+}
+*/
