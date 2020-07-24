@@ -1,0 +1,81 @@
+//动态规划。dp[i]表示到达节点i的最大概率。
+class Solution {
+	public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+		double[] dp = new double[n];
+        dp[start] = 1;
+        while(true){
+            boolean k = false;
+            for(int i=0;i<edges.length;i++){
+                if(dp[edges[i][0]]*succProb[i] > dp[edges[i][1]]){
+                    dp[edges[i][1]] = dp[edges[i][0]]*succProb[i];
+                    k = true;
+                }
+                if(dp[edges[i][1]]*succProb[i] > dp[edges[i][0]]){
+                    dp[edges[i][0]] = dp[edges[i][1]]*succProb[i];
+                    k = true;
+                }
+            }
+            if(!k)break;
+        }
+        return dp[end];
+	}
+}
+
+/*超时的dfs
+class Solution {
+    Map<Integer,List<Integer>> map;
+    Map<Integer,Integer> count;
+    public void dfs(List<List<Integer>> res, int s, int e, List<Integer> temp){
+        if(count.get(s)!=1)return;
+        temp.add(s);
+        count.put(s, 0);
+        if(s == e)res.add(new ArrayList<Integer>(temp));
+        else for(int i:map.get(s))dfs(res, i, e, temp);
+        count.put(s, 1);
+        temp.remove(new Integer(s));
+    }
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+        List<List<Integer>> edge = new ArrayList<List<Integer>>();
+        for(int[] temp:edges){
+            List<Integer> t = new ArrayList<Integer>();
+            for(int k:temp){
+                t.add(k);
+            }
+            edge.add(new ArrayList<Integer>(t));
+        }
+        int i;
+        count = new HashMap<Integer,Integer>();
+        map = new HashMap<Integer,List<Integer>>();
+        for(i=0;i<n;i++){
+            count.put(i,1);
+            map.put(i,new ArrayList<Integer>());
+        }
+        for(int[] temp:edges){
+            map.get(temp[0]).add(temp[1]);
+            map.get(temp[1]).add(temp[0]);
+        }
+        //先列出所有的可能路径，保存在res中。
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        dfs(res, start, end, new ArrayList<Integer>());
+        //System.out.println(res);
+        if(res.size() == 0)return 0;
+        else{
+            double p, max = -1;
+            int k, index;
+            for(List<Integer> t:res){
+                p = 1;
+                for(k=0;k<t.size()-1;k++){
+                    index = 0;
+                    for(List<Integer> l:edge){
+                        if(l.contains(t.get(k)) && l.contains(t.get(k+1)))break;
+                        index++;
+                    }
+                    p *= succProb[index];
+                }
+                if(p > max)max = p;
+            }
+            return max;
+        }
+    }
+}
+*/
