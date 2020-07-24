@@ -1,0 +1,25 @@
+//dp，从1开始递推
+class Solution {
+    public boolean divisorGame(int N) {
+        boolean[] dp = new boolean[N+5];
+        dp[1] = false;
+        dp[2] = true;
+        for(int i=3;i<=N;i++){
+            for(int j=(int)i/2;j>=1;j--){
+                if(i%j == 0 && !dp[i-j]){
+                    dp[i] = true;
+                    break;
+                }
+            }
+            
+        }
+        return dp[N];
+    }
+}
+/*
+class Solution {
+    public boolean divisorGame(int N) {
+        return N%2 == 0;
+    }
+}
+*/
